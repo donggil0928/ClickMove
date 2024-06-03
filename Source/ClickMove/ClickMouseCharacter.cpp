@@ -75,7 +75,9 @@ void AClickMouseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void AClickMouseCharacter::AttackDown()
 {
+	// 이동 중 캐릭터 공격 제어
 	GetCharacterMovement()->StopActiveMovement();
+	
 	
 	UE_LOG(LogTemp, Warning, TEXT("AttackDown 함수 ... "));
 	bComboAttackDown = true;

@@ -26,6 +26,7 @@ void AClickMovePlayerController::SetnewDestination(const FVector Destination)
 
 	if (MyPawn)
 	{
+		// 공격 중 캐릭터 이동 제어 
 		AClickMouseCharacter* Char = Cast<AClickMouseCharacter>(MyPawn);
 		if (Char->GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
 		{
