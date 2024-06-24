@@ -15,6 +15,8 @@ public class ClickMove : ModuleRules
 
         PrivateDependencyModuleNames.AddRange(new string[] {"Slate", "SlateCore" });
 
+        PrivateIncludePaths.AddRange(new string[] { "ClickMove" });
+
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 

@@ -10,6 +10,8 @@
 
 #include "Animation/AnimInstance.h"
 
+#include "Skill/SkillBase.h"
+
 // Sets default values
 AClickMouseCharacter::AClickMouseCharacter()
 {
@@ -49,6 +51,8 @@ AClickMouseCharacter::AClickMouseCharacter()
 	CameraComponent->SetProjectionMode(ECameraProjectionMode::Orthographic);
 
 	CameraComponent->SetOrthoWidth(2048.0f);
+
+	EquippedSkills.SetNum(4);
 }
 
 // Called when the game starts or when spawned
@@ -71,6 +75,13 @@ void AClickMouseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &AClickMouseCharacter::AttackDown);
 	PlayerInputComponent->BindAction("LeftClick", IE_Released, this, &AClickMouseCharacter::AttackUp);
+
+	//------------------스킬 사용 관련------------------
+	PlayerInputComponent->BindAction("QSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignQ);
+	PlayerInputComponent->BindAction("WSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignW);
+	PlayerInputComponent->BindAction("ESkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignE);
+	PlayerInputComponent->BindAction("RSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignR);
+	//-------------------------------------------------
 }
 
 void AClickMouseCharacter::AttackDown()
@@ -134,4 +145,39 @@ void AClickMouseCharacter::AttackCheck()
 		bComboAttackNext = false;
 		Attack();
 	}
+}
+
+void AClickMouseCharacter::SkillAssignQ()
+{
+	if (!EquippedSkills[0].IsCooldownActive())
+	{
+		EquippedSkills[0].Activate(this);
+		StartCooldown(EquippedSkills[0]);
+	}
+}
+
+void AClickMouseCharacter::SkillAssignW()
+{
+	EquippedSkills[1].Activate(this);
+}
+
+void AClickMouseCharacter::SkillAssignE()
+{
+	EquippedSkills[2].Activate(this);
+}
+
+void AClickMouseCharacter::SkillAssignR()
+{
+	EquippedSkills[3].Activate(this);
+}
+
+void AClickMouseCharacter::StartCooldown(FSkillData CurrentSkill)
+{
+	CurrentSkill.ActivateCooldown();
+	GetWorldTimerManager().SetTimer(CooldownHandle, &EndCooldown(CurrentSkill), CurrentSkill.Cooldown);
+}
+
+void AClickMouseCharacter::EndCooldown(FSkillData CurrentSkill)
+{
+	CurrentSkill.DisabledCooldown();
 }

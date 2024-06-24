@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Skill/SkillData.h"
 #include "ClickMouseCharacter.generated.h"
 
 UCLASS()
@@ -58,5 +59,26 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* SpringArmComponent;
+
+//------------------스킬 사용 관련------------------
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
+	TArray<FSkillData> EquippedSkills;
+
+	UFUNCTION(BlueprintCallable)
+	void SkillAssignQ();
+	UFUNCTION(BlueprintCallable)
+	void SkillAssignW();
+	UFUNCTION(BlueprintCallable)
+	void SkillAssignE();
+	UFUNCTION(BlueprintCallable)
+	void SkillAssignR();
+
+private:
+	FTimerHandle CooldownHandle;
+
+	void StartCooldown(FSkillData CurrentSkill);
+	void EndCooldown(FSkillData CurrentSkill);
+//-------------------------------------------------
 
 };
