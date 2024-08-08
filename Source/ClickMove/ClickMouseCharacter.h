@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Skill/SkillData.h"
 #include "ClickMouseCharacter.generated.h"
 
 UCLASS()
@@ -62,23 +61,13 @@ private:
 
 //------------------스킬 사용 관련------------------
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
-	TArray<FSkillData> EquippedSkills;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TArray<TSubclassOf<class USkillData>> Skills;	//캐릭터가 가진 스킬 배열
 
-	UFUNCTION(BlueprintCallable)
-	void SkillAssignQ();
-	UFUNCTION(BlueprintCallable)
-	void SkillAssignW();
-	UFUNCTION(BlueprintCallable)
-	void SkillAssignE();
-	UFUNCTION(BlueprintCallable)
-	void SkillAssignR();
-
-private:
-	FTimerHandle CooldownHandle;
-
-	void StartCooldown(FSkillData CurrentSkill);
-	void EndCooldown(FSkillData CurrentSkill);
+public:
+	//스킬키(Q,W,E,R) 입력 시 각 스킬을 구분하여 바인딩하기 위한 델리게이트와 함수
+	DECLARE_DELEGATE_OneParam(FUseSkillDelegate, class USkillData*);
+	void UseSkill(class USkillData* SkillDataRef);
 //-------------------------------------------------
 
 };

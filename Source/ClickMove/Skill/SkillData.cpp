@@ -2,45 +2,44 @@
 
 
 #include "Skill/SkillData.h"
+#include "ClickMouseCharacter.h"
 
-SkillData::SkillData()
+USkillData::USkillData()
 {
+	Name = FText::FromString(TEXT("Skill_Name"));
+	Description = FText::FromString(TEXT("Skill_Description"));
+	CurrentLevel = 1;
+	Range = 1.0f;
+	Cost = 1;
+	SecondToCooldown = 1.0f;
+	bIsCooldown = false;
 }
 
-SkillData::~SkillData()
+void USkillData::Use(AClickMouseCharacter* player)
 {
-}
-
-FSkillData::FSkillData()
-{
-	bIsOnCooldown = false;
-}
-
-void FSkillData::Activate(AActor* Owner)
-{
-	if(!bIsOnCooldown)
+	if (!bIsCooldown)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Skill %s Activated!"), *DebugText);
-		// 스킬 데이터에 추가해야 하는 것들을 이용
-		// 스킬을 사용했을 때의 애니메이션이나 데미지 계산 등을 함
+		UE_LOG(LogTemp, Log, TEXT("%s is Activated!"), *Name.ToString());
+
+		// 해당 부분에서 스킬 사용 시 애니메이션과 이펙트 등을 처리(예정)
+		//
+
+		//StartCooldown();
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("Skill %s is Cooldown."), *DebugText);
+		UE_LOG(LogTemp, Warning, TEXT("%s is Now Cooldown!"), *Name.ToString());
 	}
 }
 
-bool FSkillData::IsCooldownActive()
+void USkillData::StartCooldown()
 {
-	return bIsOnCooldown;
+	bIsCooldown = true;
+	GetWorld()->GetTimerManager().SetTimer(CooldownTimerHandle, this, &USkillData::EndCooldown, SecondToCooldown, false); // this 호출 시 nullptr 에러 발생, CDO를 통해 함수를 호출하는 것이 문제로 보임.
 }
 
-void FSkillData::ActivateCooldown()
+void USkillData::EndCooldown()
 {
-	bIsOnCooldown = true;
-}
-
-void FSkillData::DisabledCooldown()
-{
-	bIsOnCooldown = false;
+	bIsCooldown = false;
+	GetWorld()->GetTimerManager().ClearTimer(CooldownTimerHandle);
 }

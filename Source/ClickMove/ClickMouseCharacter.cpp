@@ -10,7 +10,7 @@
 
 #include "Animation/AnimInstance.h"
 
-#include "Skill/SkillBase.h"
+#include "Skill/SkillData.h"
 
 // Sets default values
 AClickMouseCharacter::AClickMouseCharacter()
@@ -52,7 +52,9 @@ AClickMouseCharacter::AClickMouseCharacter()
 
 	CameraComponent->SetOrthoWidth(2048.0f);
 
-	EquippedSkills.SetNum(4);
+	//------------------스킬 사용 관련------------------
+	Skills.SetNum(4);	// 캐릭터에게 할당된 스킬은 4개(배열의 크기 설정)
+	//-------------------------------------------------
 }
 
 // Called when the game starts or when spawned
@@ -77,10 +79,10 @@ void AClickMouseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("LeftClick", IE_Released, this, &AClickMouseCharacter::AttackUp);
 
 	//------------------스킬 사용 관련------------------
-	PlayerInputComponent->BindAction("QSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignQ);
-	PlayerInputComponent->BindAction("WSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignW);
-	PlayerInputComponent->BindAction("ESkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignE);
-	PlayerInputComponent->BindAction("RSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignR);
+	
+	PlayerInputComponent->BindAction<FUseSkillDelegate>("QSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[0].GetDefaultObject());	// 가독성을 위해 ENUM 타입으로 수정 고려, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
+	//PlayerInputComponent->BindAction<FUseSkillDelegate>("WSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[1].GetDefaultObject());
+
 	//-------------------------------------------------
 }
 
@@ -147,37 +149,16 @@ void AClickMouseCharacter::AttackCheck()
 	}
 }
 
-void AClickMouseCharacter::SkillAssignQ()
+//------------------스킬 사용 관련------------------
+
+void AClickMouseCharacter::UseSkill(USkillData* SkillDataRef)
 {
-	if (!EquippedSkills[0].IsCooldownActive())
-	{
-		EquippedSkills[0].Activate(this);
-		StartCooldown(EquippedSkills[0]);
-	}
+	SkillDataRef->Use(this);
+
+	/*USkillData* Skill = Cast<USkillData>(SkillDataRef);
+	if (Skill != nullptr) Skill->Use(this);
+	else UE_LOG(LogTemp, Warning, TEXT("Skill Not Found"));*/
 }
 
-void AClickMouseCharacter::SkillAssignW()
-{
-	EquippedSkills[1].Activate(this);
-}
 
-void AClickMouseCharacter::SkillAssignE()
-{
-	EquippedSkills[2].Activate(this);
-}
-
-void AClickMouseCharacter::SkillAssignR()
-{
-	EquippedSkills[3].Activate(this);
-}
-
-void AClickMouseCharacter::StartCooldown(FSkillData CurrentSkill)
-{
-	CurrentSkill.ActivateCooldown();
-	GetWorldTimerManager().SetTimer(CooldownHandle, &EndCooldown(CurrentSkill), CurrentSkill.Cooldown);
-}
-
-void AClickMouseCharacter::EndCooldown(FSkillData CurrentSkill)
-{
-	CurrentSkill.DisabledCooldown();
-}
+//-------------------------------------------------
