@@ -71,15 +71,25 @@ void AClickMouseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &AClickMouseCharacter::AttackDown);
 	PlayerInputComponent->BindAction("LeftClick", IE_Released, this, &AClickMouseCharacter::AttackUp);
+<<<<<<< Updated upstream
+=======
+
+	//------------------ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½------------------
+	PlayerInputComponent->BindAction("QSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignQ);
+	PlayerInputComponent->BindAction("WSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignW);
+	PlayerInputComponent->BindAction("ESkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignE);
+	PlayerInputComponent->BindAction("RSkill", IE_Pressed, this, &AClickMouseCharacter::SkillAssignR);
+	//-------------------------------------------------
+>>>>>>> Stashed changes
 }
 
 void AClickMouseCharacter::AttackDown()
 {
-	// ÀÌµ¿ Áß Ä³¸¯ÅÍ °ø°Ý Á¦¾î
+	// ï¿½Ìµï¿½ ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	GetCharacterMovement()->StopActiveMovement();
 	
 	
-	UE_LOG(LogTemp, Warning, TEXT("AttackDown ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("AttackDown ï¿½Ô¼ï¿½ ... "));
 	bComboAttackDown = true;
 
 	if (bComboAttacking == false)
@@ -99,7 +109,7 @@ void AClickMouseCharacter::AttackUp()
 
 void AClickMouseCharacter::Attack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attack ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("Attack ï¿½Ô¼ï¿½ ... "));
 	bComboAttackDown = true;
 
 	UAnimInstance* AnimaInstance = GetMesh()->GetAnimInstance();
@@ -111,7 +121,7 @@ void AClickMouseCharacter::Attack()
 
 	if (ComboAttackNumber >= 4)
 		ComboAttackNumber = 0;
-	UE_LOG(LogTemp, Warning, TEXT("                 ÄÞº¸°ø°Ý ComboAttack%d"), ComboAttackNumber);
+	UE_LOG(LogTemp, Warning, TEXT("                 ï¿½Þºï¿½ï¿½ï¿½ï¿½ï¿½ ComboAttack%d"), ComboAttackNumber);
 
 	AnimaInstance->Montage_Play(comboMontage, 1.5f);
 	AnimaInstance->Montage_JumpToSection(FName(comboList[ComboAttackNumber]), comboMontage);
@@ -119,14 +129,14 @@ void AClickMouseCharacter::Attack()
 
 void AClickMouseCharacter::AttackEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ComboAttackEnd ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttackEnd ï¿½Ô¼ï¿½ ... "));
 	bComboAttacking = false;
 	ComboAttackNumber = 0;
 }
 
 void AClickMouseCharacter::AttackCheck()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ComboAttackCheck ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttackCheck ï¿½Ô¼ï¿½ ... "));
 
 	if (bComboAttackNext == true)
 	{
@@ -134,4 +144,43 @@ void AClickMouseCharacter::AttackCheck()
 		bComboAttackNext = false;
 		Attack();
 	}
+<<<<<<< Updated upstream
 }
+=======
+}
+
+void AClickMouseCharacter::SkillAssignQ()
+{
+	if (!EquippedSkills[0].IsCooldownActive())
+	{
+		EquippedSkills[0].Activate(this);
+		StartCooldown(EquippedSkills[0]);
+	}
+}
+
+void AClickMouseCharacter::SkillAssignW()
+{
+	EquippedSkills[1].Activate(this);
+}
+
+void AClickMouseCharacter::SkillAssignE()
+{
+	EquippedSkills[2].Activate(this);
+}
+
+void AClickMouseCharacter::SkillAssignR()
+{
+	EquippedSkills[3].Activate(this);
+}
+
+void AClickMouseCharacter::StartCooldown(FSkillData CurrentSkill)
+{
+	CurrentSkill.ActivateCooldown();
+	//GetWorldTimerManager().SetTimer(CooldownHandle, &EndCooldown(CurrentSkill), CurrentSkill.Cooldown);
+}
+
+void AClickMouseCharacter::EndCooldown(FSkillData CurrentSkill)
+{
+	CurrentSkill.DisabledCooldown();
+}
+>>>>>>> Stashed changes
