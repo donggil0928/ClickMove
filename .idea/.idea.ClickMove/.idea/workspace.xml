@@ -12,12 +12,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63febc59-54fb-426f-859d-b8e9ebac7959" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/Asset/1324.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/1324.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset/1324_PhysicsAsset.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/1324_PhysicsAsset.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset/1324_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/1324_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset/test/Blueprint/AnimBP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset/test/Blueprint/AnimBP.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ClickMove/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ClickMove/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Architecture/Floor_400x400.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Architecture/Floor_400x400.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ClickMove/ClickMouseCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ClickMove/ClickMouseCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ClickMove/ClickMouseCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ClickMove/ClickMouseCharacter.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +38,7 @@
   &quot;keyToString&quot;: {
     &quot;C++ 프로젝트.ClickMove.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Skill&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -492,6 +491,7 @@
       <updated>1721280293548</updated>
       <workItem from="1721280296318" duration="439000" />
       <workItem from="1723090466129" duration="8037000" />
+      <workItem from="1723185072909" duration="1319000" />
     </task>
     <servers />
   </component>

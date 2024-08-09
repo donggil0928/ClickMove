@@ -52,8 +52,8 @@ AClickMouseCharacter::AClickMouseCharacter()
 
 	CameraComponent->SetOrthoWidth(2048.0f);
 
-	//------------------½ºÅ³ »ç¿ë °ü·Ã------------------
-	Skills.SetNum(4);	// Ä³¸¯ÅÍ¿¡°Ô ÇÒ´çµÈ ½ºÅ³Àº 4°³(¹è¿­ÀÇ Å©±â ¼³Á¤)
+	//------------------ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½------------------
+	Skills.SetNum(4);	// Ä³ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ 4ï¿½ï¿½(ï¿½è¿­ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 	//-------------------------------------------------
 }
 
@@ -78,21 +78,21 @@ void AClickMouseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &AClickMouseCharacter::AttackDown);
 	PlayerInputComponent->BindAction("LeftClick", IE_Released, this, &AClickMouseCharacter::AttackUp);
 
-	//------------------½ºÅ³ »ç¿ë °ü·Ã------------------
+
+	//------------------ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½------------------
 	
-	PlayerInputComponent->BindAction<FUseSkillDelegate>("QSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[0].GetDefaultObject());	// °¡µ¶¼ºÀ» À§ÇØ ENUM Å¸ÀÔÀ¸·Î ¼öÁ¤ °í·Á, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
+	PlayerInputComponent->BindAction<FUseSkillDelegate>("QSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[0].GetDefaultObject());	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ENUM Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
 	//PlayerInputComponent->BindAction<FUseSkillDelegate>("WSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[1].GetDefaultObject());
 
 	//-------------------------------------------------
 }
-
 void AClickMouseCharacter::AttackDown()
 {
-	// ÀÌµ¿ Áß Ä³¸¯ÅÍ °ø°Ý Á¦¾î
+	// ï¿½Ìµï¿½ ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	GetCharacterMovement()->StopActiveMovement();
 	
 	
-	UE_LOG(LogTemp, Warning, TEXT("AttackDown ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("AttackDown ï¿½Ô¼ï¿½ ... "));
 	bComboAttackDown = true;
 
 	if (bComboAttacking == false)
@@ -112,7 +112,7 @@ void AClickMouseCharacter::AttackUp()
 
 void AClickMouseCharacter::Attack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attack ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("Attack ï¿½Ô¼ï¿½ ... "));
 	bComboAttackDown = true;
 
 	UAnimInstance* AnimaInstance = GetMesh()->GetAnimInstance();
@@ -124,7 +124,7 @@ void AClickMouseCharacter::Attack()
 
 	if (ComboAttackNumber >= 4)
 		ComboAttackNumber = 0;
-	UE_LOG(LogTemp, Warning, TEXT("                 ÄÞº¸°ø°Ý ComboAttack%d"), ComboAttackNumber);
+	UE_LOG(LogTemp, Warning, TEXT("                 ï¿½Þºï¿½ï¿½ï¿½ï¿½ï¿½ ComboAttack%d"), ComboAttackNumber);
 
 	AnimaInstance->Montage_Play(comboMontage, 1.5f);
 	AnimaInstance->Montage_JumpToSection(FName(comboList[ComboAttackNumber]), comboMontage);
@@ -132,14 +132,14 @@ void AClickMouseCharacter::Attack()
 
 void AClickMouseCharacter::AttackEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ComboAttackEnd ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttackEnd ï¿½Ô¼ï¿½ ... "));
 	bComboAttacking = false;
 	ComboAttackNumber = 0;
 }
 
 void AClickMouseCharacter::AttackCheck()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ComboAttackCheck ÇÔ¼ö ... "));
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttackCheck ï¿½Ô¼ï¿½ ... "));
 
 	if (bComboAttackNext == true)
 	{
@@ -148,8 +148,7 @@ void AClickMouseCharacter::AttackCheck()
 		Attack();
 	}
 }
-
-//------------------½ºÅ³ »ç¿ë °ü·Ã------------------
+//------------------ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½------------------
 
 void AClickMouseCharacter::UseSkill(USkillData* SkillDataRef)
 {
@@ -160,5 +159,3 @@ void AClickMouseCharacter::UseSkill(USkillData* SkillDataRef)
 	else UE_LOG(LogTemp, Warning, TEXT("Skill Not Found"));*/
 }
 
-
-//-------------------------------------------------

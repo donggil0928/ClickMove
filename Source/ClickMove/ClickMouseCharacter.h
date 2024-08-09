@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Skill/SkillData.h"
 #include "ClickMouseCharacter.generated.h"
 
 UCLASS()
@@ -34,23 +35,23 @@ public:
 
 	//UPROPERTY(EditAnywhere, Category = "ComboAttack", meta = (AllowPrivateAccess = "true"))
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "ComboAttack", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* comboMontage;	// ¾Ö´Ï¸ÞÀÌ¼Ç ¸ùÅ¸ÁÖ
+	class UAnimMontage* comboMontage;	// ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
 
-	// ÀÏ¹Ý °ø°Ý
+	// ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UFUNCTION(BlueprintCallable)
-	void AttackDown();	// ¸¶¿ì½º ¿ÞÂÊ ¹öÆ° ´©¸§ - ÀÏ¹Ý °ø°Ý
-
-	UFUNCTION(BlueprintCallable)
-	void AttackUp();	// ¸¶¿ì½º ¿ÞÂÊ ¹öÆ° ÇØÁ¦ - ÀÏ¹Ý °ø°Ý Á¾·á
+	void AttackDown();	// ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ - ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	UFUNCTION(BlueprintCallable)
-	void Attack();	// Combo ¸ùÅ¸ÁÖ Section ÇÃ·¹ÀÌ
+	void AttackUp();	// ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ - ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	UFUNCTION(BlueprintCallable)
-	void AttackEnd();	// ³ëÆ¼ÆÄÀÌ - combo ¸ùÅ¸ÁÖ Section Á¾·á
+	void Attack();	// Combo ï¿½ï¿½Å¸ï¿½ï¿½ Section ï¿½Ã·ï¿½ï¿½ï¿½
 
 	UFUNCTION(BlueprintCallable)
-	void AttackCheck();	// combo Section ÀÎµ¦½º Áõ°¡
+	void AttackEnd();	// ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ - combo ï¿½ï¿½Å¸ï¿½ï¿½ Section ï¿½ï¿½ï¿½ï¿½
+
+	UFUNCTION(BlueprintCallable)
+	void AttackCheck();	// combo Section ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
@@ -59,15 +60,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* SpringArmComponent;
 
-//------------------½ºÅ³ »ç¿ë °ü·Ã------------------
+//------------------ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½------------------
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TArray<TSubclassOf<class USkillData>> Skills;	//Ä³¸¯ÅÍ°¡ °¡Áø ½ºÅ³ ¹è¿­
-
+	TArray<TSubclassOf<class USkillData>> Skills;	//Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ ï¿½è¿­
+	
 public:
-	//½ºÅ³Å°(Q,W,E,R) ÀÔ·Â ½Ã °¢ ½ºÅ³À» ±¸ºÐÇÏ¿© ¹ÙÀÎµùÇÏ±â À§ÇÑ µ¨¸®°ÔÀÌÆ®¿Í ÇÔ¼ö
+	//ï¿½ï¿½Å³Å°(Q,W,E,R) ï¿½Ô·ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Îµï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ô¼ï¿½
 	DECLARE_DELEGATE_OneParam(FUseSkillDelegate, class USkillData*);
 	void UseSkill(class USkillData* SkillDataRef);
-//-------------------------------------------------
 
 };
