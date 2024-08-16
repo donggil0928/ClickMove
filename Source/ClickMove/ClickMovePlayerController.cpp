@@ -8,7 +8,26 @@
 AClickMovePlayerController::AClickMovePlayerController()
 {
 	bShowMouseCursor = true;
+	bClickRightMouse = false; //
+	MyChar = nullptr; //
 }
+
+ void AClickMovePlayerController::BeginPlay()
+ {
+ 	Super::BeginPlay();
+	
+ 	APawn* MyPawn = GetPawn();
+	
+	AClickMouseCharacter* Char = Cast<AClickMouseCharacter>(MyPawn);
+	if (Char)
+	{
+		MyChar = Char;
+	}
+	else
+	{
+		MyChar = nullptr;
+	}
+ }
 
 void AClickMovePlayerController::InputRightMouseButtonPressed()
 {
@@ -20,40 +39,65 @@ void AClickMovePlayerController::InputRightMouseButtonReleased()
 	bClickRightMouse = false;
 }
 
-void AClickMovePlayerController::SetnewDestination(const FVector Destination)
+void AClickMovePlayerController::SetNewDestination( const FVector Destination)
 {
-	APawn* const MyPawn = GetPawn();
-
-	if (MyPawn)
+	if (MyChar)
 	{
-		// °ø°Ý Áß Ä³¸¯ÅÍ ÀÌµ¿ Á¦¾î 
-		AClickMouseCharacter* Char = Cast<AClickMouseCharacter>(MyPawn);
-		if (Char->GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
-		{
-			return;
-		}
-
-		float const Distance = FVector::Dist(Destination, MyPawn->GetActorLocation());
-		if (Distance > 120.0f)
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, Destination);
+		MyChar->SetnewDestination(this, Destination);
 	}
 }
 
 void AClickMovePlayerController::MoveToMouseCursor()
 {
+	if (!MyChar) return;
+	
 	FHitResult Hit;
 	GetHitResultUnderCursor(ECC_Visibility, false, Hit);
 
 	if (Hit.bBlockingHit)
-		SetnewDestination(Hit.ImpactPoint);
+		SetNewDestination(Hit.ImpactPoint);
 }
 
 void AClickMovePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-
+	
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &AClickMovePlayerController::InputRightMouseButtonPressed);
 	InputComponent->BindAction("RightClick", IE_Released, this, &AClickMovePlayerController::InputRightMouseButtonReleased);
+
+	
+	
+	InputComponent->BindAction("LeftClick", IE_Pressed, this, &AClickMovePlayerController::OnLeftClickPressed);
+	InputComponent->BindAction("LeftClick", IE_Released, this, &AClickMovePlayerController::OnLeftClickReleased);
+	
+	InputComponent->BindAction<FUseSkillDelegate>("QSkill", IE_Pressed, this, &AClickMovePlayerController::UseSkill, 0);	// ê°€ë…ì„±ì„ ìœ„í•´ ENUM íƒ€ìž…ìœ¼ë¡œ ìˆ˜ì • ê³ ë ¤, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
+	//InputComponent->BindAction<FUseSkillDelegate>("WSkill", IE_Pressed, this, &AClickMovePlayerController::UseSkill, 1);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ENUM Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
+	//InputComponent->BindAction<FUseSkillDelegate>("ESkill", IE_Pressed, this, &AClickMovePlayerController::UseSkill, 2);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ENUM Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
+	//InputComponent->BindAction<FUseSkillDelegate>("RSkill", IE_Pressed, this, &AClickMovePlayerController::UseSkill, 3);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ENUM Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
+    	
+}
+
+void AClickMovePlayerController::OnLeftClickPressed()
+{
+	if (MyChar)
+	{
+		MyChar->AttackDown();
+	}
+}
+void AClickMovePlayerController::OnLeftClickReleased()
+{
+	if (MyChar)
+	{
+		MyChar->AttackUp();
+	}
+}
+
+void AClickMovePlayerController::UseSkill(int SkillIndex)
+{
+	if (!MyChar) return;
+	
+	AClickMouseCharacter* Char = Cast<AClickMouseCharacter>(GetPawn());
+	Char->UseSkill(SkillIndex);
 }
 
 void AClickMovePlayerController::PlayerTick(float DeltaTime)

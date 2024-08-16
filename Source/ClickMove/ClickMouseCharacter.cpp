@@ -2,6 +2,8 @@
 
 
 #include "ClickMouseCharacter.h"
+
+#include "ClickMovePlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/DefaultPawn.h"
@@ -9,6 +11,7 @@
 #include "GameFramework/SpringArmComponent.h"
 
 #include "Animation/AnimInstance.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 #include "Skill/SkillData.h"
 
@@ -52,8 +55,8 @@ AClickMouseCharacter::AClickMouseCharacter()
 
 	CameraComponent->SetOrthoWidth(2048.0f);
 
-	//------------------��ų ��� ����------------------
-	Skills.SetNum(4);	// ĳ���Ϳ��� �Ҵ�� ��ų�� 4��(�迭�� ũ�� ����)
+	//------------------스킬 사용 관련------------------
+	Skills.SetNum(4);	// 캐릭터에게 할당된 스킬은 4개(배열의 크기 설정)
 	//-------------------------------------------------
 }
 
@@ -69,30 +72,33 @@ void AClickMouseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AClickMouseCharacter::SetnewDestination(AClickMovePlayerController* _LogPlayerController, const FVector Destination) const
+{
+	// 공격 중 캐릭터 이동 제어
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
+	{
+		return;
+	}
+
+	float const Distance = FVector::Dist(Destination, GetActorLocation());
+	if (Distance > 120.0f)
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(_LogPlayerController, Destination);
+}
+
 void AClickMouseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	check(PlayerInputComponent);
-
-	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &AClickMouseCharacter::AttackDown);
-	PlayerInputComponent->BindAction("LeftClick", IE_Released, this, &AClickMouseCharacter::AttackUp);
-
-
-	//------------------��ų ��� ����------------------
-	
-	PlayerInputComponent->BindAction<FUseSkillDelegate>("QSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[0].GetDefaultObject());	// �������� ���� ENUM Ÿ������ ���� ���, EX) Skills[ESkillKey::Key_Q].GetDefaultObject()
-	//PlayerInputComponent->BindAction<FUseSkillDelegate>("WSkill", IE_Pressed, this, &AClickMouseCharacter::UseSkill, Skills[1].GetDefaultObject());
-
-	//-------------------------------------------------
 }
+
 void AClickMouseCharacter::AttackDown()
 {
-	// �̵� �� ĳ���� ���� ����
+	// 이동 중 캐릭터 공격 제어
 	GetCharacterMovement()->StopActiveMovement();
 	
 	
-	UE_LOG(LogTemp, Warning, TEXT("AttackDown �Լ� ... "));
+	UE_LOG(LogTemp, Warning, TEXT("AttackDown 함수 실행"));
 	bComboAttackDown = true;
 
 	if (bComboAttacking == false)
@@ -112,7 +118,7 @@ void AClickMouseCharacter::AttackUp()
 
 void AClickMouseCharacter::Attack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attack �Լ� ... "));
+	UE_LOG(LogTemp, Warning, TEXT("Attack 함수 실행"));
 	bComboAttackDown = true;
 
 	UAnimInstance* AnimaInstance = GetMesh()->GetAnimInstance();
@@ -124,7 +130,7 @@ void AClickMouseCharacter::Attack()
 
 	if (ComboAttackNumber >= 4)
 		ComboAttackNumber = 0;
-	UE_LOG(LogTemp, Warning, TEXT("                 �޺����� ComboAttack%d"), ComboAttackNumber);
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttack%d 실행"), ComboAttackNumber);
 
 	AnimaInstance->Montage_Play(comboMontage, 1.5f);
 	AnimaInstance->Montage_JumpToSection(FName(comboList[ComboAttackNumber]), comboMontage);
@@ -132,7 +138,7 @@ void AClickMouseCharacter::Attack()
 
 void AClickMouseCharacter::AttackEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ComboAttackEnd �Լ� ... "));
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttackEnd 함수 실행"));
 	bComboAttacking = false;
 	ComboAttackNumber = 0;
 }
@@ -148,14 +154,13 @@ void AClickMouseCharacter::AttackCheck()
 		Attack();
 	}
 }
-//------------------��ų ��� ����------------------
+//------------------스킬 사용 관련------------------
 
-void AClickMouseCharacter::UseSkill(USkillData* SkillDataRef)
+void AClickMouseCharacter::UseSkill(int skillIndex)
 {
-	SkillDataRef->Use(this);
+	Cast<USkillData>(Skills[skillIndex]->GetDefaultObject())->Use(this);
 
 	/*USkillData* Skill = Cast<USkillData>(SkillDataRef);
 	if (Skill != nullptr) Skill->Use(this);
 	else UE_LOG(LogTemp, Warning, TEXT("Skill Not Found"));*/
 }
-

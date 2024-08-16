@@ -7,6 +7,10 @@
 #include "Skill/SkillData.h"
 #include "ClickMouseCharacter.generated.h"
 
+class AClickMovePlayerController;
+
+DECLARE_DELEGATE_OneParam(FUseSkillDelegate, int);
+
 UCLASS()
 class CLICKMOVE_API AClickMouseCharacter : public ACharacter
 {
@@ -15,6 +19,7 @@ class CLICKMOVE_API AClickMouseCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AClickMouseCharacter();
+	void SetnewDestination(AClickMovePlayerController* _LogPlayerController, const FVector Destination) const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -66,8 +71,7 @@ public:
 	TArray<TSubclassOf<class USkillData>> Skills;	//ĳ���Ͱ� ���� ��ų �迭
 	
 public:
-	//��ųŰ(Q,W,E,R) �Է� �� �� ��ų�� �����Ͽ� ���ε��ϱ� ���� ��������Ʈ�� �Լ�
-	DECLARE_DELEGATE_OneParam(FUseSkillDelegate, class USkillData*);
-	void UseSkill(class USkillData* SkillDataRef);
-
+	//스킬(Q,W,E,R) 입력 시 각 스킬을 구분하여 바인딩하기
+	void UseSkill(int skillIndex);
+	
 };
